@@ -6,6 +6,7 @@ jobs:
       - name: server
         release: gocd
     instances: 1
+    persistent_disk: 10240
     resource_pool: server
     networks:
       - name: gocd
@@ -24,6 +25,7 @@ jobs:
       - name: web
         release: drone
     instances: 1
+    persistent_disk: 10240
     resource_pool: agent
     networks:
       - name: gocd

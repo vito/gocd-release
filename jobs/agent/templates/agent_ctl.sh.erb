@@ -3,6 +3,7 @@
 RUN_DIR=/var/vcap/sys/run/agent
 LOG_DIR=/var/vcap/sys/log/agent
 DATA_DIR=/var/vcap/data/agent
+STORE_DIR=/var/vcap/store/agent
 PIDFILE=$RUN_DIR/agent.pid
 
 source /var/vcap/packages/gocd_pid_utils/pid_utils.sh
@@ -24,6 +25,9 @@ case $1 in
     mkdir -p $DATA_DIR
     chown -R vcap:vcap $DATA_DIR
 
+    mkdir -p $STORE_DIR
+    chown -R vcap:vcap $STORE_DIR
+
     # java config
     export JAVA_HOME=/var/vcap/packages/agent/jdk
 
@@ -31,7 +35,7 @@ case $1 in
     export PRODUCTION_MODE=Y
     export DAEMON=Y
     export PID_FILE=$PIDFILE
-    export AGENT_WORK_DIR=$DATA_DIR
+    export AGENT_WORK_DIR=$STORE_DIR
     export GO_SERVER='<%= p("gocd.server.machine") %>'
 
     /var/vcap/packages/agent/go-agent-13.4.1/agent.sh

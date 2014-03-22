@@ -3,6 +3,7 @@
 RUN_DIR=/var/vcap/sys/run/server
 LOG_DIR=/var/vcap/sys/log/server
 DATA_DIR=/var/vcap/data/server
+STORE_DIR=/var/vcap/store/server
 PIDFILE=$RUN_DIR/server.pid
 
 source /var/vcap/packages/gocd_pid_utils/pid_utils.sh
@@ -23,6 +24,9 @@ case $1 in
     mkdir -p $DATA_DIR
     chown -R vcap:vcap $DATA_DIR
 
+    mkdir -p $STORE_DIR
+    chown -R vcap:vcap $STORE_DIR
+
     # java config
     export JAVA_HOME=/var/vcap/packages/server/jdk
 
@@ -31,7 +35,7 @@ case $1 in
     export DAEMON=Y
     export SERVER_LISTEN_HOST=0.0.0.0
     export PID_FILE=$PIDFILE
-    export SERVER_WORK_DIR=$DATA_DIR
+    export SERVER_WORK_DIR=$STORE_DIR
 
     cat > $DATA_DIR/htpasswd <<EOF
 <%= p("gocd.server.htpasswd") %>
