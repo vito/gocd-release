@@ -1,0 +1,13 @@
+---
+name: agent
+templates:
+  agent_ctl.sh.erb: bin/agent_ctl
+
+packages:
+  - pid_utils
+  - agent
+  - git
+
+properties:
+  gocd.server.machine:
+    description: "Address of the GoCD server."

@@ -1,0 +1,13 @@
+---
+name: server
+templates:
+  server_ctl.sh.erb: bin/server_ctl
+
+packages:
+  - pid_utils
+  - server
+  - git
+
+properties:
+  gocd.server.htpasswd:
+    description: "htpasswd file for the server's authentication"

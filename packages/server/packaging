@@ -1,0 +1,9 @@
+set -e -x
+
+cd ${BOSH_INSTALL_TARGET}
+
+mkdir jdk
+tar zxvf ${BOSH_COMPILE_TARGET}/openjdk/openjdk-1.7.0_51.tar.gz -C jdk
+
+unzip ${BOSH_COMPILE_TARGET}/gocd/go-server-13.4.1-18342.zip
+chmod +x go-server-13.4.1/*.sh

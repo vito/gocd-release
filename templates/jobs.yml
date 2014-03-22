@@ -1,0 +1,29 @@
+networks: (( merge ))
+
+jobs:
+  - name: server
+    templates:
+      - name: server
+        release: gocd
+    instances: 1
+    resource_pool: server
+    networks:
+      - name: gocd
+        static_ips: (( static_ips(0) ))
+    properties:
+      gocd:
+        server:
+          htpasswd: (( merge ))
+
+  - name: agent
+    templates:
+      - name: agent
+        release: gocd
+    instances: 1
+    resource_pool: agent
+    networks:
+      - name: gocd
+    properties:
+      gocd:
+        server:
+          machine: (( jobs.server.networks.gocd.static_ips.[0] ))

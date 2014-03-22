@@ -1,0 +1,8 @@
+---
+name: server
+
+dependencies:
+
+files:
+  - gocd/go-server-13.4.1-18342.zip
+  - openjdk/openjdk-1.7.0_51.tar.gz

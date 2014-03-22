@@ -1,0 +1,18 @@
+#!/bin/sh
+
+templates=$(cd $(dirname $0)/../templates && pwd)
+
+infrastructure=$1
+
+shift
+
+if [ ! -f "$templates/infrastructure-${infrastructure}.yml" ]; then
+  echo "unknown infrastructure: ${infrastructure}"
+  exit 1
+fi
+
+spiff merge \
+  $templates/deployment.yml \
+  $templates/jobs.yml \
+  $templates/infrastructure-${infrastructure}.yml \
+  $*

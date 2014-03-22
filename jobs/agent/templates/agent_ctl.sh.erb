@@ -1,0 +1,50 @@
+#!/bin/bash -e
+
+RUN_DIR=/var/vcap/sys/run/agent
+LOG_DIR=/var/vcap/sys/log/agent
+DATA_DIR=/var/vcap/data/agent
+PIDFILE=$RUN_DIR/agent.pid
+
+source /var/vcap/packages/pid_utils/pid_utils.sh
+
+export PATH=/var/vcap/packages/git/bin:$PATH
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE "agent"
+
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $LOG_DIR
+    chown -R vcap:vcap $LOG_DIR
+
+    mkdir -p $DATA_DIR
+    chown -R vcap:vcap $DATA_DIR
+
+    # java config
+    export JAVA_HOME=/var/vcap/packages/agent/jdk
+
+    # agent config
+    export PRODUCTION_MODE=Y
+    export DAEMON=Y
+    export PID_FILE=$PIDFILE
+    export AGENT_WORK_DIR=$DATA_DIR
+    export GO_SERVER='<%= p("gocd.server.machine") %>'
+
+    /var/vcap/packages/agent/go-agent-13.4.1/agent.sh
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+
+  *)
+    echo "Usage: agent_ctl {start|stop}"
+
+    ;;
+
+esac

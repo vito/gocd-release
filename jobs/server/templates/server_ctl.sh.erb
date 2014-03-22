@@ -1,0 +1,54 @@
+#!/bin/bash -e
+
+RUN_DIR=/var/vcap/sys/run/server
+LOG_DIR=/var/vcap/sys/log/server
+DATA_DIR=/var/vcap/data/server
+PIDFILE=$RUN_DIR/server.pid
+
+source /var/vcap/packages/pid_utils/pid_utils.sh
+
+export PATH=/var/vcap/packages/git/bin:$PATH
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE "server"
+
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $LOG_DIR
+    chown -R vcap:vcap $LOG_DIR
+
+    mkdir -p $DATA_DIR
+    chown -R vcap:vcap $DATA_DIR
+
+    # java config
+    export JAVA_HOME=/var/vcap/packages/server/jdk
+
+    # server config
+    export MANUAL_SETTING=Y
+    export DAEMON=Y
+    export SERVER_LISTEN_HOST=0.0.0.0
+    export PID_FILE=$PIDFILE
+    export SERVER_WORK_DIR=$DATA_DIR
+
+    cat > $DATA_DIR/htpasswd <<EOF
+<%= p("gocd.server.htpasswd") %>
+EOF
+
+    /var/vcap/packages/server/go-server-13.4.1/server.sh
+
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+
+  *)
+    echo "Usage: server_ctl {start|stop}"
+
+    ;;
+
+esac
