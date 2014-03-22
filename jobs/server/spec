@@ -4,7 +4,7 @@ templates:
   server_ctl.sh.erb: bin/server_ctl
 
 packages:
-  - pid_utils
+  - gocd_pid_utils
   - server
   - git
 

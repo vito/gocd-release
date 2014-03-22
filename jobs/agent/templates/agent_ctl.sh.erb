@@ -5,9 +5,10 @@ LOG_DIR=/var/vcap/sys/log/agent
 DATA_DIR=/var/vcap/data/agent
 PIDFILE=$RUN_DIR/agent.pid
 
-source /var/vcap/packages/pid_utils/pid_utils.sh
+source /var/vcap/packages/gocd_pid_utils/pid_utils.sh
 
 export PATH=/var/vcap/packages/git/bin:$PATH
+export PATH=/var/vcap/packages/drone/bin:$PATH
 
 case $1 in
 

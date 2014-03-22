@@ -1,5 +1,5 @@
 ---
-name: pid_utils
+name: gocd_pid_utils
 
 dependencies: []
 
